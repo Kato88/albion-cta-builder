@@ -20,142 +20,146 @@ namespace Zorn.Models {
         {
             Roles.Add(new Role {
                 Category = "Tank",
-                Title = "Camlann"
+                Title = "Camlann",
+                InternalName = "T8_2H_MACE_MORGANA"
             });
 
             Roles.Add(new Role {
                 Category = "Tank",
                 Title = "Grovekeeper",
+                InternalName = "T8_2H_RAM_KEEPER"
             });
 
             Roles.Add(new Role{
                 Category = "Tank",
-                Title = "Soulscythe"
-            });
-
-            Roles.Add(new Role {
-                Category = "Tank",
-                Title = "Other",
+                Title = "Soulscythe",
+                InternalName = "T8_2H_TWINSCYTHE_HELL"
             });
 
             Roles.Add(new Role {
                 Category = "Heal",
-                Title = "Holy"
+                Title = "Holy",
+                InternalName = "T8_2H_HOLYSTAFF_HELL"
             });
 
             Roles.Add(new Role {
                 Category = "Heal",
                 Title = "Nature",
-            });
-
-            Roles.Add(new Role {
-                Category = "Heal",
-                Title = "Other"
+                InternalName = "T8_2H_NATURESTAFF_KEEPER"
             });
 
             Roles.Add(new Role {
                 Category = "Melee",
-                Title = "Clarent Blade"
+                Title = "Clarent Blade",
+                InternalName = "T8_MAIN_SCIMITAR_MORGANA"
             });
 
             Roles.Add(new Role{
                 Category = "Melee",
-                Title = "Halberd"
+                Title = "Halberd",
+                InternalName = "T8_2H_HALBERD"
             });
 
             Roles.Add(new Role{
                 Category = "Melee",
-                Title = "Gala"
+                Title = "Gala",
+                InternalName = "T8_2H_DUALSCIMITAR_UNDEAD"
             });
 
             Roles.Add(new Role{
                 Category = "Melee",
-                Title = "Bloodletter"
-            });
-
-            Roles.Add(new Role{
-                Category = "Melee",
-                Title = "Other"
+                Title = "Bloodletter",
+                InternalName = "T8_MAIN_RAPIER_MORGANA"
             });
 
             Roles.Add(new Role{
                 Category = "Ranged",
-                Title = "Brimstone"
+                Title = "Brimstone",
+                InternalName = "T8_2H_FIRESTAFF_HELL"
             });
 
             Roles.Add(new Role{
                 Category = "Ranged",
-                Title = "Siegebow"
+                Title = "Siegebow",
+                InternalName = "T8_2H_CROSSBOWLARGE_MORGANA"
             });
 
             Roles.Add(new Role{
                 Category = "Ranged",
-                Title = "Wailing Bow"
+                Title = "Wailing Bow",
+                InternalName = "T8_2H_BOW_HELL"
             });
 
             Roles.Add(new Role{
                 Category = "Ranged",
-                Title = "Permafrost"
+                Title = "Permafrost",
+                InternalName = "T8_2H_ICECRYSTAL_UNDEAD"
             });
 
             Roles.Add(new Role{
                 Category = "Ranged",
-                Title = "Weeping"
+                Title = "Weeping",
+                InternalName = "T8_2H_REPEATINGCROSSBOW_UNDEAD"
             });
 
             Roles.Add(new Role{
                 Category = "Support",
-                Title = "Locus"
+                Title = "Locus",
+                InternalName = "T8_2H_ENIGMATICORB_MORGANA"
             });
 
             Roles.Add(new Role{
                 Category = "Support",
-                Title = "Occult"
+                Title = "Occult",
+                InternalName = "T8_2H_ARCANESTAFF_HELL"
             });
 
             Roles.Add(new Role{
                 Category = "Support",
-                Title = "Enigmatic"
+                Title = "Enigmatic",
+                InternalName = "T8_2H_ENIGMATICSTAFF"
             });
 
             Roles.Add(new Role{
                 Category = "Support",
-                Title = "Icicle"
+                Title = "Icicle",
+                InternalName = "T8_2H_ICEGAUNTLETS_HELL"
             });
 
             Roles.Add(new Role{
                 Category = "Support",
-                Title = "Damnation"
-            });
-
-            Roles.Add(new Role{
-                Category = "Support",
-                Title = "Other"
+                Title = "Damnation",
+                InternalName = "T8_2H_CURSEDSTAFF_MORGANA"
             });
 
             Roles.Add(new Role {
                 Category = "Battlemount",
-                Title = "Command Mammoth"
+                Title = "Command Mammoth",
+                InternalName = "T8_MOUNT_MAMMOTH_BATTLE"
             });
 
             Roles.Add(new Role {
                 Category = "Battlemount",
-                Title = "Beetle"
+                Title = "Beetle",
+                InternalName = "UNIQUE_MOUNT_BEETLE_SILVER"
             });
 
             Roles.Add(new Role {
                 Category = "Battlemount",
-                Title = "Ballista"
+                Title = "Ballista",
+                InternalName = "T6_MOUNT_SIEGE_BALLISTA"
             });
 
             Roles.Add(new Role {
                 Category = "Battlemount",
-                Title = "Basilisk"
+                Title = "Basilisk",
+                InternalName = "T7_MOUNT_ARMORED_SWAMPDRAGON_BATTLE"
             });
 
             Roles.Add(new Role {
                 Category = "Battlemount",
-                Title = "Eagle"
+                Title = "Eagle",
+                InternalName = "UNIQUE_MOUNT_ARMORED_EAGLE_CRYSTAL"
             });
         }
     }

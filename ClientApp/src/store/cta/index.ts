@@ -19,7 +19,7 @@ const mod = {
                 .configureLogging(signalR.LogLevel.Information)
                 .build();
 
-            const playerName = window.localStorage.getItem('playerName');
+            const playerName = window.localStorage.getItem('player');
 
             if (playerName) {
                 commit.SET_PLAYER_NAME(playerName);

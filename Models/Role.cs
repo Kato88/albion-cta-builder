@@ -6,6 +6,7 @@ namespace Zorn.Models {
         public Guid Id {get; set;}
         public string Title {get; set;}
         public string Category {get; set;}
+        public string InternalName {get; set;}
         public List<Player> Players {get; set;}
 
         public Role()

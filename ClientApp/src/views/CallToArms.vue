@@ -1,11 +1,11 @@
 <template>
-  <v-container v-if="cta">
+  <v-container fluid v-if="cta">
     <v-row>
-      <v-col cols="4">
+      <v-col cols="3">
         <v-card>
           <v-card-title>Your role in {{cta.title}}</v-card-title>
           <v-card-text v-for="group in groupedRoles" :key="group.id">
-            <div>{{group.key}}s</div>
+            <div>{{group.key}}</div>
             <v-btn-toggle dense v-model="selectedRole">
               <div>
                 <v-btn
@@ -13,30 +13,41 @@
                   v-for="role in group.roles"
                   :key="role.id"
                   @click="selectRole(role)"
-                >{{role.title}}</v-btn>
+                  icon
+                  style="height: 64px; width: 64px"
+                >
+                  <img height="64" width="64"
+                    :src="`https://albiononline2d.ams3.cdn.digitaloceanspaces.com/thumbnails/orig/${role.internalName}`"
+                  />
+                </v-btn>
               </div>
             </v-btn-toggle>
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="8">
-        <v-row>
-          <v-col cols="6" v-for="group in groupedRoles" :key="group.key">
-            <v-card>
-              <v-card-title>{{group.key}} ({{group.total}})</v-card-title>
-              <v-card-text>
-                <v-expansion-panels multiple accordion>
-                  <v-expansion-panel v-for="role in group.roles" :key="role.title">
-                    <v-expansion-panel-header>{{role.title}}: {{role.players.length}}</v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                      <span v-for="player in role.players" :key="player.name">{{player.name}},</span>
-                    </v-expansion-panel-content>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
+      <v-col cols="9">
+        <v-list subheader>
+          <template v-for="group in groupedRoles">
+            <v-subheader :key="group.key">{{group.key}}s: {{group.total}}</v-subheader>
+            <v-row :key="'row-' + group.key">
+              <v-col cols="3" v-for="role in group.roles" :key="role.id">
+                <v-list-item>
+                  <v-list-item-avatar :rounded="false">
+                    <img
+                      :src="`https://albiononline2d.ams3.cdn.digitaloceanspaces.com/thumbnails/orig/${role.internalName}`"
+                    />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{role.players.length}} {{role.title}}s</v-list-item-title>
+                    <v-list-item-subtitle>
+                      <div v-for="player in role.players" :key="player.name">{{player.name}}</div>
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-col>
+            </v-row>
+          </template>
+        </v-list>
       </v-col>
     </v-row>
     <v-dialog v-model="pickName" persistent max-width="600px">
@@ -52,12 +63,14 @@
         <v-card-text>
           <v-text-field v-model="nameInput" required label="Your name"></v-text-field>
         </v-card-text>
-        <v-card-text>
-          After closing this Dialog you can choose your role in this CTA on the left and see what you comrades picked on the right.
-        </v-card-text>
+        <v-card-text>After closing this Dialog you can choose your role in this CTA on the left and see what you comrades picked on the right.</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="saveName">Yes save! I know that I can't change my Name after this.</v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="saveName"
+          >Yes save! I know that I can't change my Name after this.</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -120,7 +133,7 @@ export default class CallToArms extends Vue {
   }
 
   set playerName(val: string) {
-    window.localStorage.setItem("playerName", val);
+    window.localStorage.setItem("player", val);
     this.$store.direct.commit.SET_PLAYER_NAME(val);
   }
 
@@ -139,12 +152,14 @@ export default class CallToArms extends Vue {
   }
 
   public saveName() {
-    if (this.playerName === "") {
-      alert('if you are to stupid to enter your name you should not join any CTA.');
+    if (this.nameInput === "") {
+      alert(
+        "if you are to stupid to enter your name you should not join any CTA."
+      );
       window.close();
     } else {
       this.playerName = this.nameInput;
-      this.pickName = false
+      this.pickName = false;
     }
   }
 

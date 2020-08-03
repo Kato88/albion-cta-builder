@@ -51,15 +51,5 @@ namespace Zorn.Hubs
 
             await Clients.All.CtaAdded(cta);
         }
-
-        public async Task PickRole(Guid ctaId, Guid roleId, string playerName)
-        {
-            var role = _repo.PickRole(ctaId, roleId, playerName);
-
-            if (role != null) 
-            {
-                await Clients.Group(ctaId.ToString()).RoleChanged(ctaId, role);
-            }
-        }
     }
 }

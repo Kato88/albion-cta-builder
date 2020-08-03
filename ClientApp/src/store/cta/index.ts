@@ -9,6 +9,7 @@ const mod = {
         callToArms: [],
         connection: {} as signalR.HubConnection,
         connected: false,
+        playerName: '',
     } as CtaState,
     actions: {
         async init(context: any) {
@@ -18,6 +19,11 @@ const mod = {
                 .configureLogging(signalR.LogLevel.Information)
                 .build();
 
+            const playerName = window.localStorage.getItem('playerName');
+
+            if (playerName) {
+                commit.SET_PLAYER_NAME(playerName);
+            }
 
             connection.on("CtaAdded", (cta: Cta) => {
                 console.log("new cta", cta);
@@ -52,10 +58,21 @@ const mod = {
             if (state.callToArms.find((x) => x.id === joinedCta.id) === null) {
                 commit.ADD_CALL_TO_ARMS(joinedCta);
             }
+
+            state.connection.invoke('Join', ctaId);
         },
         async createCta(context: any, title: string) {
             const { commit, state } = moduleActionContext(context, mod);
             await axios.post(`/api/cta`, { title: title });
+        },
+        async selectRole(context: any, payload: {ctaId: string, roleId: string, playerName: string}) {
+            const { commit, state } = moduleActionContext(context, mod);
+
+            await axios.patch(`/api/cta`, {
+                CtaId: payload.ctaId,
+                RoleId: payload.roleId,
+                Player: payload.playerName
+            });
         }
     },
     mutations: {
@@ -66,6 +83,9 @@ const mod = {
             const asd = state.callToArms;
             asd.push(cta);
             state.callToArms = asd;
+        },
+        SET_PLAYER_NAME(state: CtaState, name: string) {
+            state.playerName = name;
         },
         UPDATE_ROLE(state: CtaState, payload: { id: string; role: Role }) {
             const ctaIndex = state.callToArms.findIndex(x => x.id === payload.id);

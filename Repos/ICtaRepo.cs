@@ -6,7 +6,7 @@ namespace Zorn.Repos {
     public interface ICtaRepo
     {
         void AddCta(CallToArms cta);
-        Role PickRole(Guid ctaId, Guid roleId, string player);
+        List<Role> PickRole(Guid ctaId, Guid roleId, string player);
         List<CallToArms> Get();
         CallToArms Get(Guid id);
     }

@@ -2,6 +2,7 @@ export interface CtaState {
   callToArms: Cta[];
   connection: signalR.HubConnection;
   connected: boolean;
+  playerName: string;
 }
 
 export interface Cta {
@@ -11,6 +12,7 @@ export interface Cta {
 }
 
 export interface Role {
+  id: string;
   title: string;
   category: string;
   players: Player[];

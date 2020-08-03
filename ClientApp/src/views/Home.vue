@@ -4,8 +4,8 @@
       <v-card-title>Open CTAs</v-card-title>
       <v-card-text>
         <v-list>
-          <v-list-item v-for="cta in ctas" :key="cta.id">
-            <v-list-item-content @click="goToCta(cta)">
+          <v-list-item v-for="cta in ctas" :key="cta.id" @click="goToCta(cta)">
+            <v-list-item-content>
               <v-list-item-title v-html="cta.title"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>

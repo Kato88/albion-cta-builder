@@ -45,12 +45,17 @@ namespace Zorn.Controllers {
             return cta;
         }
 
-        [HttpPatch("{id}/pick")]
-        public async Task<ActionResult> UpvoteQuestionAsync([FromBody] RolePick payload)
+        [HttpPatch()]
+        public async Task<ActionResult> PickRole([FromBody] RolePick payload)
         {
-            var role = _repo.PickRole(payload.CtaId, payload.RoleId, payload.Player);
-            await hubContext.Clients.Group(payload.CtaId.ToString()).RoleChanged(payload.CtaId, role);
-            return new JsonResult(role);
+            var roles = _repo.PickRole(payload.CtaId, payload.RoleId, payload.Player);
+            
+            foreach (var role in roles)
+            {
+                await hubContext.Clients.Group(payload.CtaId.ToString()).RoleChanged(payload.CtaId, role);    
+            }
+            
+            return new JsonResult(roles);
         }
     }
 

@@ -27,12 +27,20 @@ namespace Zorn.Repos {
             return null;
         }
 
-        public Role PickRole(Guid ctaId, Guid roleId, string player)
+        public List<Role> PickRole(Guid ctaId, Guid roleId, string player)
         {
             var cta = Get(ctaId);
+            var roles = new List<Role>();
 
             if (cta == null) {
                 return null;
+            }
+
+            var roleToRemoveFrom = cta.Roles.FirstOrDefault((x) => x.Players.Any((y) => y.Name == player));
+
+            if (roleToRemoveFrom != null) {
+                roleToRemoveFrom.Players.Remove(roleToRemoveFrom.Players.FirstOrDefault((x) => x.Name == player));
+                roles.Add(roleToRemoveFrom);
             }
 
             var role = cta.Roles.FirstOrDefault((x) => x.Id == roleId);
@@ -43,7 +51,9 @@ namespace Zorn.Repos {
 
             role.Players.Add(new Player { Name = player });
 
-            return role;
+            roles.Add(role);
+
+            return roles;
         }
     }
 }

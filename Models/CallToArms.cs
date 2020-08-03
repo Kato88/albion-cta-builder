@@ -19,22 +19,22 @@ namespace Zorn.Models {
         private void InitRoles() 
         {
             Roles.Add(new Role {
-                Category = "Tanks",
+                Category = "Tank",
                 Title = "Camlann"
             });
 
             Roles.Add(new Role {
-                Category = "Tanks",
-                Title = "Grovekepper",
+                Category = "Tank",
+                Title = "Grovekeeper",
             });
 
             Roles.Add(new Role{
-                Category = "Tanks",
+                Category = "Tank",
                 Title = "Soulscythe"
             });
 
             Roles.Add(new Role {
-                Category = "Tanks",
+                Category = "Tank",
                 Title = "Other",
             });
 
@@ -54,47 +54,52 @@ namespace Zorn.Models {
             });
 
             Roles.Add(new Role {
-                Category = "Bruiser",
-                Title = "Clerant Blade"
+                Category = "Melee",
+                Title = "Clarent Blade"
             });
 
             Roles.Add(new Role{
-                Category = "Bruiser",
-                Title = "Hellebard"
+                Category = "Melee",
+                Title = "Halberd"
             });
 
             Roles.Add(new Role{
-                Category = "Bruiser",
+                Category = "Melee",
                 Title = "Gala"
             });
 
             Roles.Add(new Role{
-                Category = "Bruiser",
+                Category = "Melee",
+                Title = "Bloodletter"
+            });
+
+            Roles.Add(new Role{
+                Category = "Melee",
                 Title = "Other"
             });
 
             Roles.Add(new Role{
-                Category = "Clapper",
+                Category = "Ranged",
                 Title = "Brimstone"
             });
 
             Roles.Add(new Role{
-                Category = "Clapper",
+                Category = "Ranged",
                 Title = "Siegebow"
             });
 
             Roles.Add(new Role{
-                Category = "Clapper",
+                Category = "Ranged",
                 Title = "Wailing Bow"
             });
 
             Roles.Add(new Role{
-                Category = "Clapper",
+                Category = "Ranged",
                 Title = "Permafrost"
             });
 
             Roles.Add(new Role{
-                Category = "Clapper",
+                Category = "Ranged",
                 Title = "Weeping"
             });
 
@@ -110,12 +115,47 @@ namespace Zorn.Models {
 
             Roles.Add(new Role{
                 Category = "Support",
-                Title = "Icycle"
+                Title = "Enigmatic"
+            });
+
+            Roles.Add(new Role{
+                Category = "Support",
+                Title = "Icicle"
+            });
+
+            Roles.Add(new Role{
+                Category = "Support",
+                Title = "Damnation"
             });
 
             Roles.Add(new Role{
                 Category = "Support",
                 Title = "Other"
+            });
+
+            Roles.Add(new Role {
+                Category = "Battlemount",
+                Title = "Command Mammoth"
+            });
+
+            Roles.Add(new Role {
+                Category = "Battlemount",
+                Title = "Beetle"
+            });
+
+            Roles.Add(new Role {
+                Category = "Battlemount",
+                Title = "Ballista"
+            });
+
+            Roles.Add(new Role {
+                Category = "Battlemount",
+                Title = "Basilisk"
+            });
+
+            Roles.Add(new Role {
+                Category = "Battlemount",
+                Title = "Eagle"
             });
         }
     }

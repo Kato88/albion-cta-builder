@@ -25,11 +25,6 @@ const mod = {
                 commit.SET_PLAYER_NAME(playerName);
             }
 
-            connection.on("CtaAdded", (cta: Cta) => {
-                console.log("new cta", cta);
-                commit.ADD_CALL_TO_ARMS(cta);
-            });
-
             connection.on("youJoined", (cta: Cta) => {
                 console.log("you Joined", cta);
                 commit.ADD_CALL_TO_ARMS(cta);
@@ -45,27 +40,32 @@ const mod = {
 
             await connection.start();
             commit.SET_CONNECTION(connection);
-            
-            const response = await axios.get('/api/cta');
-            commit.SET_CALL_TO_ARMS(response.data);
+
+            const data = window.localStorage.getItem('ctas');
+            if (data) {
+                const ctas = JSON.parse(data);
+                commit.SET_CALL_TO_ARMS(ctas);
+            }
         },
         async join(context: any, ctaId: string) {
             const { commit, state } = moduleActionContext(context, mod);
 
             const response = await axios.get(`/api/cta/${ctaId}`);
             const joinedCta = response.data as Cta;
-            
-            if (state.callToArms.find((x) => x.id === joinedCta.id) === null) {
-                commit.ADD_CALL_TO_ARMS(joinedCta);
-            }
+
+            console.log('addeding cta');
+            commit.ADD_CALL_TO_ARMS(joinedCta);
 
             state.connection.invoke('Join', ctaId);
         },
         async createCta(context: any, title: string) {
             const { commit, state } = moduleActionContext(context, mod);
-            await axios.post(`/api/cta`, { title: title });
+            const response = await axios.post(`/api/cta`, { title: title });
+            commit.ADD_CALL_TO_ARMS(response.data);
+
+            window.localStorage.setItem('ctas', JSON.stringify(state.callToArms));
         },
-        async selectRole(context: any, payload: {ctaId: string, roleId: string, playerName: string}) {
+        async selectRole(context: any, payload: { ctaId: string, roleId: string, playerName: string }) {
             const { commit, state } = moduleActionContext(context, mod);
 
             await axios.patch(`/api/cta`, {
@@ -81,8 +81,16 @@ const mod = {
         },
         ADD_CALL_TO_ARMS(state: CtaState, cta: Cta) {
             const asd = state.callToArms;
-            asd.push(cta);
+
+            const index = asd.findIndex((x) => x.id === cta.id);
+            if (index === -1) {
+                asd.push(cta);
+            } else {
+                asd.splice(index, 1, cta);
+            }
+
             state.callToArms = asd;
+            window.localStorage.setItem('ctas', JSON.stringify(state.callToArms));
         },
         SET_PLAYER_NAME(state: CtaState, name: string) {
             state.playerName = name;

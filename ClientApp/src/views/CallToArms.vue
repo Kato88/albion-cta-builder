@@ -1,12 +1,9 @@
 <template>
-  <v-container>
+  <v-container v-if="cta">
     <v-row>
       <v-col cols="4">
         <v-card>
-          <v-card-title>Your role</v-card-title>
-          <v-card-text>
-            <v-text-field v-model="playerName" required label="Your name"></v-text-field>
-          </v-card-text>
+          <v-card-title>Your role in {{cta.title}}</v-card-title>
           <v-card-text v-for="group in groupedRoles" :key="group.id">
             <div>{{group.key}}s</div>
             <v-btn-toggle dense v-model="selectedRole">
@@ -31,7 +28,9 @@
                 <v-expansion-panels multiple accordion>
                   <v-expansion-panel v-for="role in group.roles" :key="role.title">
                     <v-expansion-panel-header>{{role.title}}: {{role.players.length}}</v-expansion-panel-header>
-                    <v-expansion-panel-content><span v-for="player in role.players" :key="player.name">{{player.name}}, </span></v-expansion-panel-content>
+                    <v-expansion-panel-content>
+                      <span v-for="player in role.players" :key="player.name">{{player.name}},</span>
+                    </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
               </v-card-text>
@@ -40,6 +39,28 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-dialog v-model="pickName" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Welcome</span>
+        </v-card-title>
+        <v-card-text>Welcome to the CTA Builder. It looks like you are here for the first time.</v-card-text>
+        <v-card-text>
+          First of all you need to enter your ingame name. You
+          <b>cannot change the name you choose</b> so please make sure to use the correct one.
+        </v-card-text>
+        <v-card-text>
+          <v-text-field v-model="nameInput" required label="Your name"></v-text-field>
+        </v-card-text>
+        <v-card-text>
+          After closing this Dialog you can choose your role in this CTA on the left and see what you comrades picked on the right.
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="saveName">Yes save! I know that I can't change my Name after this.</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -55,6 +76,8 @@ import { Role } from "../store/cta/types";
 })
 export default class CallToArms extends Vue {
   public selectedRole = "";
+  public pickName = false;
+  public nameInput = "";
 
   get ctaId() {
     return this.$route.params.id;
@@ -115,8 +138,19 @@ export default class CallToArms extends Vue {
     });
   }
 
+  public saveName() {
+    if (this.playerName === "") {
+      alert('if you are to stupid to enter your name you should not join any CTA.');
+      window.close();
+    } else {
+      this.playerName = this.nameInput;
+      this.pickName = false
+    }
+  }
+
   created() {
     this.$store.direct.dispatch.join(this.ctaId);
+    this.pickName = this.playerName === "";
   }
 }
 </script>

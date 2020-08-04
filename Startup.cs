@@ -51,6 +51,7 @@ namespace zergtool
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();
@@ -63,14 +64,6 @@ namespace zergtool
                 endpoints.MapHub<CtaHub>("/cta");
                 endpoints.MapControllers();
             });
-
-            app.UseCors(builder =>
-                builder
-                    .WithOrigins("http://localhost:8080")
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials()
-            );
 
             app.UseSpa(spa =>
             {

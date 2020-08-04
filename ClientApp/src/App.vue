@@ -1,6 +1,7 @@
 <template>
   <v-app v-if="connected">
     <v-app-bar app color="primary" dark>
+      <v-toolbar-title>CTA Builder</v-toolbar-title>
      <v-spacer></v-spacer>
 
       <v-btn
@@ -32,6 +33,10 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-footer color="primary">
+    <v-spacer></v-spacer>
+    <div style="color: white">&copy; {{ new Date().getFullYear() }}. Made with <v-icon color="red">mdi-heart</v-icon> by SirKato for ZORN</div>
+  </v-footer>
   </v-app>
 </template>
 

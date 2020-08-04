@@ -7,6 +7,12 @@ namespace Zorn.Repos {
     public class CtaRepo : ICtaRepo
     {
         public static Dictionary<Guid, CallToArms> callToArms = new Dictionary<Guid, CallToArms>();
+        private Guid repoId;
+
+        public CtaRepo()
+        {
+            repoId = Guid.NewGuid();
+        }
 
         public void AddCta(CallToArms cta)
         {
@@ -25,6 +31,11 @@ namespace Zorn.Repos {
             }
 
             return null;
+        }
+
+        public Guid GetRepoId()
+        {
+            return repoId;
         }
 
         public List<Role> PickRole(Guid ctaId, Guid roleId, string player)

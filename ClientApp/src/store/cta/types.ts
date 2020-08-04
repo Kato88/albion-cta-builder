@@ -3,6 +3,7 @@ export interface CtaState {
   connection: signalR.HubConnection;
   connected: boolean;
   playerName: string;
+  repoId: string;
 }
 
 export interface Cta {

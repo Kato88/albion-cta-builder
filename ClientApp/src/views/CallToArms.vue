@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="3">
         <v-card>
-          <v-card-title>Your role in {{cta.title}}</v-card-title>
+          <v-card-title>Pick your role in {{cta.title}}</v-card-title>
           <v-card-text v-for="group in groupedRoles" :key="group.id">
             <div>{{group.key}}</div>
             <v-btn-toggle dense v-model="selectedRole">
@@ -16,7 +16,11 @@
                   icon
                   style="height: 64px; width: 64px"
                 >
-                  <img height="64" width="64"
+                  <img
+                    height="64"
+                    width="64"
+                    :alt="role.title"
+                    :title="role.title"
                     :src="`https://albiononline2d.ams3.cdn.digitaloceanspaces.com/thumbnails/orig/${role.internalName}`"
                   />
                 </v-btn>
@@ -26,28 +30,32 @@
         </v-card>
       </v-col>
       <v-col cols="9">
-        <v-list subheader>
-          <template v-for="group in groupedRoles">
-            <v-subheader :key="group.key">{{group.key}}s: {{group.total}}</v-subheader>
-            <v-row :key="'row-' + group.key">
-              <v-col cols="3" v-for="role in group.roles" :key="role.id">
-                <v-list-item>
-                  <v-list-item-avatar :rounded="false">
-                    <img
-                      :src="`https://albiononline2d.ams3.cdn.digitaloceanspaces.com/thumbnails/orig/${role.internalName}`"
-                    />
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title>{{role.players.length}} {{role.title}}s</v-list-item-title>
-                    <v-list-item-subtitle>
-                      <div v-for="player in role.players" :key="player.name">{{player.name}}</div>
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-col>
-            </v-row>
-          </template>
-        </v-list>
+        <v-card>
+          <v-card-text>
+            <v-list subheader dense>
+              <template v-for="group in groupedRoles">
+                <v-subheader :key="group.key"><b>{{group.key}}s: {{group.total}}</b></v-subheader>
+                <v-row :key="'row-' + group.key">
+                  <v-col cols="3" v-for="role in group.roles" :key="role.id">
+                    <v-list-item>
+                      <v-list-item-avatar :rounded="false">
+                        <img
+                          :src="`https://albiononline2d.ams3.cdn.digitaloceanspaces.com/thumbnails/orig/${role.internalName}`"
+                        />
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title>{{role.players.length}} {{role.title}}</v-list-item-title>
+                        <v-list-item-subtitle>
+                          <div v-for="player in role.players" :key="player.name">{{player.name}}</div>
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-list>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
     <v-dialog v-model="pickName" persistent max-width="600px">
@@ -169,3 +177,9 @@ export default class CallToArms extends Vue {
   }
 }
 </script>
+
+<style lang="scss">
+.v-list--dense .v-subheader {
+  height: 0px !important;
+}
+</style>

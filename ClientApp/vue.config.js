@@ -1,3 +1,5 @@
 module.exports = {
-  transpileDependencies: ["vuetify"]
+  productionSourceMap: false,
+  transpileDependencies: ["vuetify"],
+  chainWebpack: config => config.optimization.minimize(true),
 };

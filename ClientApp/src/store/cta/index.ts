@@ -10,6 +10,7 @@ const mod = {
         connection: {} as signalR.HubConnection,
         connected: false,
         playerName: '',
+        repoId: '',
     } as CtaState,
     actions: {
         async init(context: any) {
@@ -38,10 +39,23 @@ const mod = {
                 });
             });
 
+            const repoIdResponse = await axios.get('/api/cta');
+            const repoId = repoIdResponse.data as string;
+            const localRepoId = window.localStorage.getItem('repo') as string;
+
+            if (localRepoId) {
+                if (repoId !== localRepoId) {
+                    window.localStorage.removeItem(localRepoId);
+                }
+            }
+
+            window.localStorage.setItem('repo', repoId);
+            commit.SET_REPO_ID(repoId);
+
             await connection.start();
             commit.SET_CONNECTION(connection);
 
-            const data = window.localStorage.getItem('ctas');
+            const data = window.localStorage.getItem(repoId);
             if (data) {
                 const ctas = JSON.parse(data);
                 commit.SET_CALL_TO_ARMS(ctas);
@@ -90,7 +104,7 @@ const mod = {
             }
 
             state.callToArms = asd;
-            window.localStorage.setItem('ctas', JSON.stringify(state.callToArms));
+            window.localStorage.setItem(state.repoId, JSON.stringify(state.callToArms));
         },
         SET_PLAYER_NAME(state: CtaState, name: string) {
             state.playerName = name;
@@ -119,6 +133,9 @@ const mod = {
         SET_CONNECTION(state: CtaState, connection: signalR.HubConnection) {
             state.connection = connection;
             state.connected = true;
+        },
+        SET_REPO_ID(state: CtaState, repo: string) {
+            state.repoId = repo;
         }
     }
 } as const;

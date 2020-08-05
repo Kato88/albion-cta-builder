@@ -12,6 +12,19 @@
     <noscript>
       <strong>We're sorry but CTA Builder doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+    <script>
+      var last = Number(window.localStorage.getItem('last-visit'));
+      if (last) {
+        var update = last + (60 * 60 * 8 * 1000);
+        if (update < new Date().getTime()) {
+          window.localStorage.setItem('last-visit', new Date().getTime());
+          window.location.reload(true);
+        }
+      } else {
+        window.localStorage.setItem('last-visit', new Date().getTime());
+        window.location.reload(true);
+      }
+    </script>
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>

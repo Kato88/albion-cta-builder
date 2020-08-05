@@ -53,12 +53,7 @@ namespace Zorn.Controllers
         public async Task<ActionResult> PickRole([FromBody] RolePick payload)
         {
             var roles = _repo.PickRole(payload.CtaId, payload.RoleId, payload.Player);
-
-            foreach (var role in roles)
-            {
-                await hubContext.Clients.Group(payload.CtaId.ToString()).RoleChanged(payload.CtaId, role);
-            }
-
+            await hubContext.Clients.Group(payload.CtaId.ToString()).RoleChanged(payload.CtaId, roles);
             return new JsonResult(roles);
         }
     }

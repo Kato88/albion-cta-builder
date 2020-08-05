@@ -4,6 +4,7 @@ export interface CtaState {
   connected: boolean;
   playerName: string;
   repoId: string;
+  joining: boolean;
 }
 
 export interface Cta {

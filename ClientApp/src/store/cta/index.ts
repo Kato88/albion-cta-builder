@@ -11,6 +11,7 @@ const mod = {
         connected: false,
         playerName: '',
         repoId: '',
+        joining: false,
     } as CtaState,
     actions: {
         async init(context: any) {
@@ -27,15 +28,15 @@ const mod = {
             }
 
             connection.on("youJoined", (cta: Cta) => {
-                console.log("you Joined", cta);
                 commit.ADD_CALL_TO_ARMS(cta);
             });
 
-            connection.on("RoleChanged", (ctaId: string, role: Role) => {
-                console.log("role changed", role);
-                commit.UPDATE_ROLE({
-                    id: ctaId,
-                    role: role
+            connection.on("RoleChanged", (ctaId: string, roles: Role[]) => {
+                roles.forEach((role) => {
+                    commit.UPDATE_ROLE({
+                        id: ctaId,
+                        role: role
+                    });
                 });
             });
 
@@ -64,13 +65,25 @@ const mod = {
         async join(context: any, ctaId: string) {
             const { commit, state } = moduleActionContext(context, mod);
 
-            const response = await axios.get(`/api/cta/${ctaId}`);
-            const joinedCta = response.data as Cta;
+            commit.SET_JOINGING(true);
 
-            console.log('addeding cta');
-            commit.ADD_CALL_TO_ARMS(joinedCta);
+            try {
+                const response = await axios.get(`/api/cta/${ctaId}`);
+                const joinedCta = response.data as Cta;
 
-            state.connection.invoke('Join', ctaId);
+                if(joinedCta === null) {
+                    return;
+                }
+
+                console.log('addeding cta');
+                commit.ADD_CALL_TO_ARMS(joinedCta);
+
+                await state.connection.invoke('Join', ctaId);
+            } catch (ex) {
+                console.error(ex);
+            } finally {
+                commit.SET_JOINGING(false);
+            }
         },
         async createCta(context: any, title: string) {
             const { commit, state } = moduleActionContext(context, mod);
@@ -108,6 +121,9 @@ const mod = {
         },
         SET_PLAYER_NAME(state: CtaState, name: string) {
             state.playerName = name;
+        },
+        SET_JOINGING(state: CtaState, joining: boolean) {
+            state.joining = joining;
         },
         UPDATE_ROLE(state: CtaState, payload: { id: string; role: Role }) {
             const ctaIndex = state.callToArms.findIndex(x => x.id === payload.id);

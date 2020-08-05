@@ -6,7 +6,7 @@ using Zorn.Models;
 namespace Zorn.Hubs {
     public interface ICtaHub {
         Task CtaAdded(CallToArms cta);
-        Task RoleChanged(Guid ctaId, Role role);
+        Task RoleChanged(Guid ctaId, List<Role> role);
         Task SendAll(List<CallToArms> Ctas);
     }
 }

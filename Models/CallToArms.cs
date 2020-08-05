@@ -73,6 +73,12 @@ namespace Zorn.Models {
             });
 
             Roles.Add(new Role{
+                Category = "Melee",
+                Title = "Other",
+                InternalName = "T8_TRASH"
+            });
+
+            Roles.Add(new Role{
                 Category = "Ranged",
                 Title = "Brimstone",
                 InternalName = "T8_2H_FIRESTAFF_HELL"
@@ -100,6 +106,12 @@ namespace Zorn.Models {
                 Category = "Ranged",
                 Title = "Weeping",
                 InternalName = "T8_2H_REPEATINGCROSSBOW_UNDEAD"
+            });
+
+            Roles.Add(new Role{
+                Category = "Ranged",
+                Title = "Other",
+                InternalName = "T8_TRASH"
             });
 
             Roles.Add(new Role{

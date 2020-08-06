@@ -10,6 +10,7 @@ const mod = {
         connection: {} as signalR.HubConnection,
         connected: false,
         playerName: '',
+        playerGuild: '',
         repoId: '',
         joining: false,
     } as CtaState,
@@ -38,6 +39,12 @@ const mod = {
                         role: role
                     });
                 });
+            });
+            
+            connection.onclose(() => {
+                if(confirm('Connection to the server lost. Reload page?')) {
+                    window.location.reload(true);
+                }
             });
 
             const repoIdResponse = await axios.get('/api/cta');
@@ -85,14 +92,14 @@ const mod = {
                 commit.SET_JOINGING(false);
             }
         },
-        async createCta(context: any, title: string) {
+        async createCta(context: any, payload: {title: string, setup: string; bringHammers: boolean; extraSets: number}) {
             const { commit, state } = moduleActionContext(context, mod);
-            const response = await axios.post(`/api/cta`, { title: title });
+            const response = await axios.post(`/api/cta`, payload);
             commit.ADD_CALL_TO_ARMS(response.data);
 
             window.localStorage.setItem('ctas', JSON.stringify(state.callToArms));
         },
-        async selectRole(context: any, payload: { ctaId: string, roleId: string, playerName: string }) {
+        async selectRole(context: any, payload: { ctaId: string, roleId: string, playerName: string}) {
             const { commit, state } = moduleActionContext(context, mod);
 
             await axios.patch(`/api/cta`, {

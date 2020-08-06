@@ -42,6 +42,9 @@ namespace Zorn.Controllers
         {
             var cta = new CallToArms();
             cta.Title = payload.Title;
+            cta.Setup = payload.Setup;
+            cta.BringHammers = payload.BringHammers;
+            cta.ExtraSets = payload.ExtraSets;
 
             _repo.AddCta(cta);
 
@@ -61,6 +64,9 @@ namespace Zorn.Controllers
     public class CreateCtaPayload
     {
         public string Title { get; set; }
+        public string Setup { get; set; }
+        public bool BringHammers { get; set; }
+        public int ExtraSets { get; set; }
     }
 
     public class RolePick
@@ -68,5 +74,6 @@ namespace Zorn.Controllers
         public Guid CtaId { get; set; }
         public Guid RoleId { get; set; }
         public string Player { get; set; }
+        public string Guild { get; set; }
     }
 }

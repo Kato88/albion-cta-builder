@@ -3,6 +3,7 @@ export interface CtaState {
   connection: signalR.HubConnection;
   connected: boolean;
   playerName: string;
+  playerGuild: string;
   repoId: string;
   joining: boolean;
 }
@@ -10,6 +11,9 @@ export interface CtaState {
 export interface Cta {
   id: string;
   title: string;
+  setup: string;
+  bringHammers: boolean;
+  extraSets: number;
   roles: Role[];
 }
 

@@ -6,6 +6,7 @@ export interface CtaState {
   playerGuild: string;
   repoId: string;
   joining: boolean;
+  roles: Role[];
 }
 
 export interface Cta {
@@ -14,16 +15,21 @@ export interface Cta {
   setup: string;
   bringHammers: boolean;
   extraSets: number;
-  roles: Role[];
+  players: Player[];
 }
 
 export interface Role {
   id: string;
   title: string;
   category: string;
-  players: Player[];
 }
 
 export interface Player {
   name: string;
+  role: Role;
+}
+
+export interface QueuePlayer {
+  name: string;
+  roles: Role[];
 }

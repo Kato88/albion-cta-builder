@@ -7,12 +7,10 @@ namespace Zorn.Models {
         public string Title {get; set;}
         public string Category {get; set;}
         public string InternalName {get; set;}
-        public List<Player> Players {get; set;}
 
         public Role()
         {
             Id = Guid.NewGuid();
-            Players = new List<Player>();
         }
     }
 }

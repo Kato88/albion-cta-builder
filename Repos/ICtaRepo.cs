@@ -8,7 +8,6 @@ namespace Zorn.Repos {
 
         Guid GetRepoId();
         void AddCta(CallToArms cta);
-        List<Role> PickRole(Guid ctaId, Guid roleId, string player);
         List<CallToArms> Get();
         CallToArms Get(Guid id);
     }

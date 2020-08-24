@@ -51,14 +51,6 @@ namespace Zorn.Controllers
             await hubContext.Clients.All.CtaAdded(cta);
             return cta;
         }
-
-        [HttpPatch()]
-        public async Task<ActionResult> PickRole([FromBody] RolePick payload)
-        {
-            var roles = _repo.PickRole(payload.CtaId, payload.RoleId, payload.Player);
-            await hubContext.Clients.Group(payload.CtaId.ToString()).RoleChanged(payload.CtaId, roles);
-            return new JsonResult(roles);
-        }
     }
 
     public class CreateCtaPayload

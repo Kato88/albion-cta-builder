@@ -1,7 +1,13 @@
 <template>
   <v-container>
     <v-card>
-      <v-card-title>Open CTAs</v-card-title>
+      <v-card-title>
+        Open CTAs
+        <v-spacer></v-spacer>
+        <v-btn icon @click="dialog = true">
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </v-card-title>
       <v-card-text>
         <v-list>
           <v-list-item v-for="cta in ctas" :key="cta.id" @click="goToCta(cta)">
@@ -12,6 +18,41 @@
         </v-list>
       </v-card-text>
     </v-card>
+    <v-dialog v-model="dialog" width="500">
+      <v-card>
+        <v-card-title>Create new CTA</v-card-title>
+        <v-card-text>Choose a title for you CTA.</v-card-text>
+        <v-card-text>
+          <v-text-field label="Title" v-model="newCtaTitle"></v-text-field>
+        </v-card-text>
+        <v-card-text>Optional give your zerg a hint on what to wear. Like 'Castle Defense', 'Open World', 'Brawler Setup' or whatever you want.</v-card-text>
+        <v-card-text>
+          <v-text-field label="Preferred Setup" v-model="newCtaSetup"></v-text-field>
+        </v-card-text>
+        <v-card-text>
+          <v-switch
+            v-model="newCtaHammers"
+            :label="newCtaHammers ? 'Bring hammers' : 'Leave hammers at home'"
+          ></v-switch>
+        </v-card-text>
+        <v-card-text>
+          Number of sets to bring
+          <br />
+          <v-slider
+            v-model="newCtaExtraSets"
+            :tick-labels="extraSetsLabels"
+            :max="4"
+            step="1"
+            ticks="always"
+            tick-size="1"
+          ></v-slider>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="createCta">Create new CTA</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -26,13 +67,33 @@ import { Cta } from "../store/cta/types";
   components: {}
 })
 export default class Home extends Vue {
+  public dialog = false;
+  public newCtaTitle = "";
+  public newCtaSetup = "";
+  public newCtaHammers = true;
+  public newCtaExtraSets = 2;
+  public extraSetsLabels = ["None", "1 extra", "2 extra", "3 extra", "ALL"];
+
   get ctas(): Cta[] {
     const c = this.$store.direct.state.callToArms.callToArms;
     return c;
   }
 
   public goToCta(cta: Cta) {
-    this.$router.push('/cta/' + cta.id);
+    this.$router.push("/cta/admin/" + cta.id);
+  }
+
+  public async createCta() {
+    await this.$store.direct.dispatch.createCta({
+      title: this.newCtaTitle,
+      setup: this.newCtaSetup,
+      bringHammers: this.newCtaHammers,
+      extraSets: this.newCtaExtraSets
+    });
+
+    this.newCtaTitle = "";
+    this.newCtaSetup = "";
+    this.dialog = false;
   }
 }
 </script>

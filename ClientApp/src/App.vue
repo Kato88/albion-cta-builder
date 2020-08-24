@@ -1,57 +1,8 @@
 <template>
-  <v-app v-if="connected">
-    <v-app-bar app color="primary" dark>
-      <v-toobar-title v-if="currentCta">
-        <router-link to="/" style="margin-right: 20px;">
-          <v-icon>mdi-arrow-left</v-icon>
-        </router-link>
-      </v-toobar-title>
-      <v-toolbar-title>CTA Builder</v-toolbar-title>
-      <v-spacer></v-spacer>
-
-      <v-btn @click="dialog = true">
-        <span class="mr-2">Create CTA</span>
-      </v-btn>
-    </v-app-bar>
-
+  <v-app v-if="connected" dark>
     <v-main>
       <router-view />
     </v-main>
-
-    <v-dialog v-model="dialog" width="500">
-      <v-card>
-        <v-card-title>Create new CTA</v-card-title>
-        <v-card-text>Choose a title for you CTA.</v-card-text>
-        <v-card-text>
-          <v-text-field label="Title" v-model="newCtaTitle"></v-text-field>
-        </v-card-text>
-        <v-card-text>Optional give your zerg a hint on what to wear. Like 'Castle Defense', 'Open World', 'Brawler Setup' or whatever you want.</v-card-text>
-        <v-card-text>
-          <v-text-field label="Preferred Setup" v-model="newCtaSetup"></v-text-field>
-        </v-card-text>
-        <v-card-text>
-          <v-switch
-            v-model="newCtaHammers"
-            :label="newCtaHammers ? 'Bring hammers' : 'Leave hammers at home'"
-          ></v-switch>
-        </v-card-text>
-        <v-card-text>
-          Number of sets to bring<br/>
-          <v-slider
-            v-model="newCtaExtraSets"
-            :tick-labels="extraSetsLabels"
-            :max="4"
-            step="1"
-            ticks="always"
-            tick-size="1"
-          ></v-slider>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="createCta">Create new CTA</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
     <v-dialog v-model="pickName" persistent max-width="600px">
       <v-card>
         <v-card-title>
@@ -98,34 +49,9 @@ import { Cta } from "./store/cta/types";
 })
 export default class App extends Vue {
   public pickName = false;
-  public dialog = false;
-  public newCtaTitle = "";
-  public newCtaSetup = "";
-  public newCtaHammers = true;
-  public newCtaExtraSets = 2;
   public nameInput = "";
-  public extraSetsLabels = [
-    "None",
-    '1 extra',
-    '2 extra',
-    '3 extra',
-    'ALL',
-  ];
 
-  public async createCta() {
-    await this.$store.direct.dispatch.createCta({
-      title: this.newCtaTitle,
-      setup: this.newCtaSetup,
-      bringHammers: this.newCtaHammers,
-      extraSets: this.newCtaExtraSets,
-    });
-
-    this.newCtaTitle = "";
-    this.newCtaSetup = "";
-    this.dialog = false;
-  }
-
-  get connected() {
+get connected() {
     return this.$store.direct.state.callToArms.connected;
   }
 
@@ -139,20 +65,6 @@ export default class App extends Vue {
     return this.$store.direct.state.callToArms.callToArms.find(
       x => x.id === ctaId
     );
-  }
-
-  get totalPlayersCount() {
-    if (!this.currentCta) {
-      return 0;
-    }
-
-    let count = 0;
-
-    this.currentCta.roles.forEach(x => {
-      count += x.players.length;
-    });
-
-    return count;
   }
 
   get playerName() {

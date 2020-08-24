@@ -13,6 +13,7 @@ const mod = {
         playerGuild: '',
         repoId: '',
         joining: false,
+        roles: [],
     } as CtaState,
     actions: {
         async init(context: any) {
@@ -30,15 +31,6 @@ const mod = {
 
             connection.on("youJoined", (cta: Cta) => {
                 commit.ADD_CALL_TO_ARMS(cta);
-            });
-
-            connection.on("RoleChanged", (ctaId: string, roles: Role[]) => {
-                roles.forEach((role) => {
-                    commit.UPDATE_ROLE({
-                        id: ctaId,
-                        role: role
-                    });
-                });
             });
             
             connection.onclose(() => {
@@ -59,6 +51,10 @@ const mod = {
 
             window.localStorage.setItem('repo', repoId);
             commit.SET_REPO_ID(repoId);
+
+            const rolesResponse = await axios.get('/api/roles');
+            const roles = rolesResponse.data as Role[];
+            commit.SET_ROLES(roles);
 
             await connection.start();
             commit.SET_CONNECTION(connection);
@@ -132,33 +128,15 @@ const mod = {
         SET_JOINGING(state: CtaState, joining: boolean) {
             state.joining = joining;
         },
-        UPDATE_ROLE(state: CtaState, payload: { id: string; role: Role }) {
-            const ctaIndex = state.callToArms.findIndex(x => x.id === payload.id);
-
-            if (ctaIndex === -1) {
-                return;
-            }
-
-            const cta = state.callToArms[ctaIndex];
-
-            const roleIndex = cta.roles.findIndex(
-                x =>
-                    x.title === payload.role.title && x.category === payload.role.category
-            );
-
-            if (roleIndex === -1) {
-                return;
-            }
-
-            cta.roles.splice(roleIndex, 1, payload.role);
-            state.callToArms.splice(ctaIndex, 1, cta);
-        },
         SET_CONNECTION(state: CtaState, connection: signalR.HubConnection) {
             state.connection = connection;
             state.connected = true;
         },
         SET_REPO_ID(state: CtaState, repo: string) {
             state.repoId = repo;
+        },
+        SET_ROLES(state: CtaState, roles: Role[]) {
+            state.roles = roles;
         }
     }
 } as const;

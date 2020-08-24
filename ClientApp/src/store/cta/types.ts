@@ -22,6 +22,7 @@ export interface Role {
   id: string;
   title: string;
   category: string;
+  internalName: string;
 }
 
 export interface Player {

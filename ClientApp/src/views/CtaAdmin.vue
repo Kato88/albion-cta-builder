@@ -14,7 +14,7 @@
           <v-container v-show="partyView === true">
             <v-row style="flex-wrap: nowrap; min-height: 500px; overflow-x: auto;">
               <v-col cols="3" v-for="party in parties" :key="party.name">
-                <party-lane :party="party"></party-lane>
+                <party-lane :party="party" @dropped="onPlayerDropped" @removed="onPlayerRemoved"></party-lane>
               </v-col>
               <v-col cols="2">
                 <v-btn block text transparent @click="addParty">+</v-btn>
@@ -52,7 +52,9 @@ import QueueLane from "../components/QueueLane.vue";
   }
 })
 export default class CallToArms extends Vue {
-  public queue: QueuePlayer[] = [];
+  private queue: QueuePlayer[] = [];
+  private picked: QueuePlayer[] = [];
+
   public partyView = true;
 
   public parties: Array<{ name: string; players: Player[] }> = [];
@@ -105,6 +107,22 @@ export default class CallToArms extends Vue {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
+  }
+
+  public onPlayerDropped(e: { player: string; role: Role }) {
+    const idx = this.queue.findIndex(x => x.name === e.player);
+    if (idx > -1) {
+      this.picked.push(this.queue[idx]);
+      this.queue.splice(idx, 1);
+    }
+  }
+
+  public onPlayerRemoved(e: { player: string; role: Role }) {
+    const idx = this.picked.findIndex(x => x.name === e.player);
+    if (idx > -1) {
+      this.queue.push(this.picked[idx]);
+      this.picked.splice(idx, 1);
+    }
   }
 }
 </script>

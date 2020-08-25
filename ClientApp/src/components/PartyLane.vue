@@ -109,7 +109,15 @@ export default class PartyLane extends Vue {
   }
 
   public remove(player: Player, index: number) {
-    this.party.players.splice(index, 1);
+    const idx = this.party.players.findIndex(x => x.name === player.name);
+    if (idx > -1) {
+      this.party.players.splice(idx, 1);
+    }
+
+    this.$emit("removed", {
+      player: player.name,
+      role: player.role
+    });
   }
 }
 </script>

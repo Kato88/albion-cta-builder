@@ -6,7 +6,7 @@
           <v-card-title color="light-blue" dark>
             Queue {{queue.length}}
             <v-spacer></v-spacer>
-            <v-btn icon v-if="filter" @click="filter = ''">
+            <v-btn icon v-if="hasFilters" @click="clearFilter">
               <v-icon>mdi-close</v-icon>
             </v-btn>
             <v-menu>
@@ -18,17 +18,30 @@
               <v-card tile>
                 <v-container fluid>
                   <template v-for="(roles, category) in rolesGrouped">
-                    <v-subheader :key="category">{{category}}</v-subheader>
-                    <v-row :key="category + 'row'">
-                      <v-col cols="2" v-for="role in roles" :key="role.title + '-filter'">
-                        <v-btn icon @click="filter = role.internalName">
-                          <role-avatar
-                            style="width: 40px; height: 40px;"
-                            :src="role.internalName"
-                          ></role-avatar>
-                        </v-btn>
-                      </v-col>
-                    </v-row>
+                    <v-subheader :key="category">
+                      <v-btn
+                        block
+                        text
+                        class="text-left"
+                        style="justify-content: left;"
+                        @click="() => { clearFilter(); categoryFilter = category }"
+                      >{{category}}</v-btn>
+                    </v-subheader>
+                    <v-card-text
+                      :key="category + 'row'"
+                      style="padding-top: 0px; padding-bottom: 0px;"
+                    >
+                      <v-row>
+                        <v-col cols="2" v-for="role in roles" :key="role.title + '-filter'">
+                          <v-btn icon @click="() => { clearFilter(); filter = role.internalName }">
+                            <role-avatar
+                              style="width: 40px; height: 40px;"
+                              :src="role.internalName"
+                            ></role-avatar>
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
                   </template>
                 </v-container>
               </v-card>
@@ -41,23 +54,24 @@
                 <v-list-item-subtitle>
                   <draggable
                     class="tile"
-                    :group="{name: 'player', pull:'clone', put:false }"
+                    :group="{name: 'player', pull:'clone', put: false }"
                     :set-data="setData"
                     :sort="false"
-                    @change="log"
-                    @onStart="log"
                     @end="onDragEnd"
                     handle=".handle"
+                    id="queueDraggable"
                   >
-                    <role-avatar
-                      :data-player="item.name"
-                      :data-role="role.internalName"
-                      class="handle"
-                      v-for="role in item.roles"
-                      :key="item.name + '-' + role.internalName"
-                      style="width: 32px; height: 32px; min-width: 32px; margin: 0;"
-                      :src="role.internalName"
-                    ></role-avatar>
+                    <template v-for="role in item.roles">
+                      <role-avatar
+                        :data-player="item.name"
+                        :data-role="role.internalName"
+                        class="handle"
+                        :key="item.name + '-' + role.internalName"
+                        style="width: 32px; height: 32px; min-width: 32px; margin: 0;"
+                        :src="role.internalName"
+                        v-if="(!filter || filter === role.internalName) && (!categoryFilter || categoryFilter === role.category)"
+                      ></role-avatar>
+                    </template>
                   </draggable>
                 </v-list-item-subtitle>
               </v-list-item-content>
@@ -82,16 +96,26 @@ export default class QueueLane extends Vue {
   @Prop() public queue!: QueuePlayer[];
 
   public filter = "";
+  public categoryFilter = "";
+
+  get hasFilters() {
+    return this.filter !== "" || this.categoryFilter !== "";
+  }
 
   get filteredQueue() {
-    if (!this.filter) {
+    if (!this.filter && !this.categoryFilter) {
       return this.queue;
     }
 
     const filteredQueue: QueuePlayer[] = [];
 
     this.queue.forEach(x => {
-      if (x.roles.findIndex(y => y.internalName === this.filter) !== -1) {
+      if (
+        x.roles.findIndex(
+          y =>
+            y.internalName === this.filter || y.category === this.categoryFilter
+        ) !== -1
+      ) {
         filteredQueue.push(x);
       }
     });
@@ -121,10 +145,6 @@ export default class QueueLane extends Vue {
     return grouped;
   }
 
-  public log(e: any) {
-    console.log("somethign changed", e);
-  }
-
   public setData(dataTransfer: DataTransfer, wow: HTMLElement) {
     const playerName = wow.getAttribute("data-player");
     const roleName = wow.getAttribute("data-role");
@@ -134,7 +154,20 @@ export default class QueueLane extends Vue {
   }
 
   public onDragEnd(e: any) {
+    if (e.to.id !== "queueDraggable") {
       e.item.remove();
+    }
+  }
+
+  public clearFilter() {
+    this.filter = "";
+    this.categoryFilter = "";
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.handle {
+  cursor: grab;
+}
+</style>

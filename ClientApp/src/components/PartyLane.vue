@@ -5,18 +5,37 @@
       <v-spacer></v-spacer>
       <span style="font-size: 14px;">{{party.players.length}}/20</span>
     </v-card-title>
+
     <v-list subheader dense style="min-height: 500px;">
-      <template v-for="(players, category) in groupedByCategory">
-        <template v-if="players.length > 0">
-          <v-subheader :key="category">{{category}} - {{players.length}}</v-subheader>
-          <v-list-item v-for="player in players" :key="player.name">
-              <role-avatar style="width: 32px; height: 32px; min-width: 32px; margin: 0;" :src="player.role.internalName"></role-avatar>
-            <v-list-item-content>
-              <v-list-item-title v-text="player.name"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+      <draggable
+        :group="{name: 'player', pull: false, put: true }"
+        :sort="false"
+        :ghostClass="'droparea'"
+        dragClass="droparea"
+        @change="log"
+        @add="add"
+        style="height: 100%; min-height: 500px;"
+      >
+        <template v-for="(players, category) in groupedByCategory">
+          <template v-if="players.length > 0">
+            <v-subheader :key="category">{{category}} - {{players.length}}</v-subheader>
+            <v-list-item v-for="(player, index) in players" :key="player.name">
+              <role-avatar
+                style="width: 32px; height: 32px; margin: 0px;"
+                :src="player.role.internalName"
+              ></role-avatar>
+              <v-list-item-content>
+                <v-list-item-title v-text="player.name"></v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action style="margin-top: 0px; margin-bottom: 0px;">
+                <v-btn icon @click="remove(player, index)">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
+          </template>
         </template>
-      </template>
+      </draggable>
     </v-list>
   </v-card>
 </template>
@@ -24,11 +43,15 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { Party } from "../store/types";
 import RoleAvatar from "./RoleAvatar.vue";
+import draggable from "vuedraggable";
+import { QueuePlayer, Role, Player } from "../store/cta/types";
 @Component({
-  components: { RoleAvatar }
+  components: { RoleAvatar, draggable }
 })
 export default class PartyLane extends Vue {
   @Prop() public party!: Party;
+
+  public dropList: QueuePlayer[] = [];
 
   get groupedByCategory() {
     const grouped: any = {
@@ -51,5 +74,48 @@ export default class PartyLane extends Vue {
 
     return grouped;
   }
+
+  public log(e: any) {
+    console.log("party lane", e);
+  }
+
+  public add(e: any) {
+    const dataTransfer = e.originalEvent.dataTransfer as DataTransfer;
+    const playerName = dataTransfer.getData("player") as string;
+    const roleName = dataTransfer.getData("role") as string;
+    const role = this.$store.direct.state.callToArms.roles.find(
+      x => x.internalName === roleName
+    );
+
+    if (!role) {
+      return;
+    }
+
+    console.log(role);
+    console.log(
+      `moving player '${playerName}' as '${role.internalName}' to '${this.party.name}'`
+    );
+    this.$emit("dropped", {
+      player: playerName,
+      role: role
+    });
+
+    this.party.players.push({
+      name: playerName,
+      role: role
+    });
+
+    // e.item.remove();
+  }
+
+  public remove(player: Player, index: number) {
+    this.party.players.splice(index, 1);
+  }
 }
 </script>
+
+<style lang="scss" scoped>
+.droparea {
+  display: none !important;
+}
+</style>

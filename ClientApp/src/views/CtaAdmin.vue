@@ -6,12 +6,12 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="3" style="padding-top: 0px;">
+      <v-col cols="3" style="padding-top: 0px; padding-right: 0px;">
         <queue-lane :queue="queue"></queue-lane>
       </v-col>
-      <v-col cols="9" style="padding-top: 0px;">
-        <v-expand-transition>
-          <v-container v-show="partyView === true">
+      <v-col cols="9" style="padding-top: 0px; padding-left: 0px;">
+        <v-fade-transition hide-on-leave>
+          <v-container fluid v-show="partyView === true">
             <v-row style="flex-wrap: nowrap; min-height: 500px; overflow-x: auto;">
               <v-col cols="3" v-for="party in parties" :key="party.name">
                 <party-lane :party="party" @dropped="onPlayerDropped" @removed="onPlayerRemoved"></party-lane>
@@ -21,10 +21,10 @@
               </v-col>
             </v-row>
           </v-container>
-        </v-expand-transition>
-        <v-expand-transition>
+        </v-fade-transition>
+        <v-fade-transition hide-on-leave>
           <roles-distribution v-show="!partyView" :parties="parties"></roles-distribution>
-        </v-expand-transition>
+        </v-fade-transition>
       </v-col>
     </v-row>
   </v-container>
@@ -51,7 +51,7 @@ import QueueLane from "../components/QueueLane.vue";
     QueueLane
   }
 })
-export default class CallToArms extends Vue {
+export default class CtaAdmin extends Vue {
   private queue: QueuePlayer[] = [];
   private picked: QueuePlayer[] = [];
 

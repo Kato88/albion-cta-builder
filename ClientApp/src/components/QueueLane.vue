@@ -48,34 +48,36 @@
             </v-menu>
           </v-card-title>
           <v-list dense two-line subheader style="min-height: 500px;">
-            <v-list-item v-for="item in filteredQueue" :key="item.name">
-              <v-list-item-content>
-                <v-list-item-title v-text="item.name"></v-list-item-title>
-                <v-list-item-subtitle>
-                  <draggable
-                    class="tile"
-                    :group="{name: 'player', pull:'clone', put: false }"
-                    :set-data="setData"
-                    :sort="false"
-                    @end="onDragEnd"
-                    handle=".handle"
-                    id="queueDraggable"
-                  >
-                    <template v-for="role in item.roles">
-                      <role-avatar
-                        :data-player="item.name"
-                        :data-role="role.internalName"
-                        class="handle"
-                        :key="item.name + '-' + role.internalName"
-                        style="width: 32px; height: 32px; min-width: 32px; margin: 0;"
-                        :src="role.internalName"
-                        v-if="(!filter || filter === role.internalName) && (!categoryFilter || categoryFilter === role.category)"
-                      ></role-avatar>
-                    </template>
-                  </draggable>
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
+            <v-fade-transition class="py-0" group hide-on-leave>
+              <v-list-item v-for="item in filteredQueue" :key="item.name">
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.name"></v-list-item-title>
+                  <v-list-item-subtitle>
+                    <draggable
+                      class="tile"
+                      :group="{name: 'player', pull:'clone', put: false }"
+                      :set-data="setData"
+                      :sort="false"
+                      @end="onDragEnd"
+                      handle=".handle"
+                      id="queueDraggable"
+                    >
+                      <template v-for="role in item.roles">
+                        <role-avatar
+                          :data-player="item.name"
+                          :data-role="role.internalName"
+                          class="handle"
+                          :key="item.name + '-' + role.internalName"
+                          style="width: 32px; height: 32px; min-width: 32px; margin: 0;"
+                          :src="role.internalName"
+                          v-if="(!filter || filter === role.internalName) && (!categoryFilter || categoryFilter === role.category)"
+                        ></role-avatar>
+                      </template>
+                    </draggable>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-fade-transition>
           </v-list>
         </v-card>
       </v-col>

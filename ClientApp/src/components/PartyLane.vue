@@ -17,22 +17,24 @@
         style="height: 100%; min-height: 500px;"
       >
         <template v-for="(players, category) in groupedByCategory">
-          <template v-if="players.length > 0">
-            <v-subheader :key="category">{{category}} - {{players.length}}</v-subheader>
-            <v-list-item v-for="(player, index) in players" :key="player.name">
-              <role-avatar
-                style="width: 32px; height: 32px; margin: 0px;"
-                :src="player.role.internalName"
-              ></role-avatar>
-              <v-list-item-content>
-                <v-list-item-title v-text="player.name"></v-list-item-title>
-              </v-list-item-content>
-              <v-list-item-action style="margin-top: 0px; margin-bottom: 0px;">
-                <v-btn icon @click="remove(player, index)">
-                  <v-icon>mdi-close</v-icon>
-                </v-btn>
-              </v-list-item-action>
-            </v-list-item>
+          <template>
+            <v-subheader style="height: 15px !important;" :key="category">{{category}} - {{players.length}}</v-subheader>
+            <v-fade-transition :key="category + '-fade'" class="py-0" group hide-on-leave>
+              <v-list-item v-for="(player, index) in players" :key="player.name">
+                <role-avatar
+                  style="width: 32px; height: 32px; margin: 0px;"
+                  :src="player.role.internalName"
+                ></role-avatar>
+                <v-list-item-content>
+                  <v-list-item-title v-text="player.name"></v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action style="margin-top: 0px; margin-bottom: 0px;">
+                  <v-btn icon @click="remove(player, index)">
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                </v-list-item-action>
+              </v-list-item>
+            </v-fade-transition>
           </template>
         </template>
       </draggable>

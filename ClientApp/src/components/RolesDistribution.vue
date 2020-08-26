@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row style="flex-wrap: nowrap; min-height: 500px; overflow-x: auto;">
       <v-col cols="12">
         <v-card>
@@ -17,11 +17,7 @@
                     :key="category + '-' + role + '-overview'"
                   >
                     <v-list-item>
-                      <v-btn icon>
-                        <v-list-item-avatar :rounded="false">
-                          <role-avatar :src="roleIcons[role]"></role-avatar>
-                        </v-list-item-avatar>
-                      </v-btn>
+                      <role-avatar :src="roleIcons[role]"></role-avatar>
                       <v-list-item-content>
                         <v-list-item-title>{{players.length}} {{role}}</v-list-item-title>
                         <v-list-item-subtitle>

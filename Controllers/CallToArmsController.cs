@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using zergtool;
 using Zorn.Hubs;
 using Zorn.Models;
 using Zorn.Repos;
@@ -18,11 +20,13 @@ namespace Zorn.Controllers
     public class CallToArmsController : ControllerBase
     {
         private readonly IHubContext<CtaHub, ICtaHub> hubContext;
+        private ApplicationDbContext _ctaDbContext;
         private static ICtaRepo _repo = new CtaRepo();
 
-        public CallToArmsController(IHubContext<CtaHub, ICtaHub> context)
+        public CallToArmsController(IHubContext<CtaHub, ICtaHub> context, ApplicationDbContext ctaContext)
         {
             hubContext = context;
+            _ctaDbContext = ctaContext;
         }
 
         [HttpGet()]
@@ -41,15 +45,37 @@ namespace Zorn.Controllers
         public async Task<CallToArms> AddCta([FromBody] CreateCtaPayload payload)
         {
             var cta = new CallToArms();
+            cta.Id = Guid.NewGuid();
             cta.Title = payload.Title;
             cta.Setup = payload.Setup;
             cta.BringHammers = payload.BringHammers;
             cta.ExtraSets = payload.ExtraSets;
 
-            _repo.AddCta(cta);
+            cta.Parties.Add(new Party { Name = "Party 1" });
 
-            await hubContext.Clients.All.CtaAdded(cta);
+            await _ctaDbContext.AddAsync(cta);
+            await _ctaDbContext.SaveChangesAsync();
+
             return cta;
+        }
+
+        [HttpPost("{id}/join")]
+        public async Task<ActionResult> JoinCtaQueue(Guid id, [FromBody] QueuePlayer queuePlayer)
+        {
+            queuePlayer.Id = Guid.NewGuid();
+            queuePlayer.Roles.ForEach(x => x.Id = Guid.NewGuid());
+
+            var cta = await _ctaDbContext.Ctas.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (cta == null)
+            {
+                return NotFound("CTA not found");
+            }
+
+            cta.Queue.Add(queuePlayer);
+
+            await _ctaDbContext.SaveChangesAsync();
+            return Ok();
         }
     }
 

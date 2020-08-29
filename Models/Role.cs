@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zorn.Models {
     public class Role {
@@ -7,10 +8,6 @@ namespace Zorn.Models {
         public string Title {get; set;}
         public string Category {get; set;}
         public string InternalName {get; set;}
-
-        public Role()
-        {
-            Id = Guid.NewGuid();
-        }
+        public string IconUrl { get; set; }
     }
 }

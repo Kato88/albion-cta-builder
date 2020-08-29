@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zorn.Models
 {
@@ -10,13 +11,13 @@ namespace Zorn.Models
         public string Setup { get; set; }
         public bool BringHammers {get; set;}
         public int ExtraSets {get; set;}
-        public List<Player> Players { get; set; }
+        public List<Party> Parties { get; set; }
+        public List<QueuePlayer> Queue {get ;set;}
 
         public CallToArms()
         {
-            Id = Guid.NewGuid();
-            Players = new List<Player>();
+            Parties = new List<Party>();
+            Queue = new List<QueuePlayer>();
         }
-
     }
 }

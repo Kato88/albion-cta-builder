@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using zergtool;
 
 namespace zergtool.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200830093441_AddedCtaAdmins")]
+    partial class AddedCtaAdmins
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,7 +172,7 @@ namespace zergtool.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ctas");
+                    b.ToTable("Cta");
                 });
 
             modelBuilder.Entity("Zorn.Models.CtaAdmin", b =>
@@ -198,7 +200,7 @@ namespace zergtool.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CtaId")
+                    b.Property<Guid?>("CallToArmsId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -206,7 +208,7 @@ namespace zergtool.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CtaId");
+                    b.HasIndex("CallToArmsId");
 
                     b.ToTable("Party");
                 });
@@ -241,7 +243,7 @@ namespace zergtool.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CtaId")
+                    b.Property<Guid?>("CallToArmsId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -249,7 +251,7 @@ namespace zergtool.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CtaId");
+                    b.HasIndex("CallToArmsId");
 
                     b.ToTable("QueuePlayers");
                 });
@@ -427,16 +429,14 @@ namespace zergtool.Migrations
                 {
                     b.HasOne("Zorn.Models.CallToArms", "CallToArms")
                         .WithMany("Admins")
-                        .HasForeignKey("CallToArmsId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CallToArmsId");
                 });
 
             modelBuilder.Entity("Zorn.Models.Party", b =>
                 {
-                    b.HasOne("Zorn.Models.CallToArms", "Cta")
+                    b.HasOne("Zorn.Models.CallToArms", null)
                         .WithMany("Parties")
-                        .HasForeignKey("CtaId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CallToArmsId");
                 });
 
             modelBuilder.Entity("Zorn.Models.Player", b =>
@@ -452,10 +452,9 @@ namespace zergtool.Migrations
 
             modelBuilder.Entity("Zorn.Models.QueuePlayer", b =>
                 {
-                    b.HasOne("Zorn.Models.CallToArms", "Cta")
+                    b.HasOne("Zorn.Models.CallToArms", null)
                         .WithMany("Queue")
-                        .HasForeignKey("CtaId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CallToArmsId");
                 });
 
             modelBuilder.Entity("Zorn.Models.QueueRole", b =>

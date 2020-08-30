@@ -17,9 +17,9 @@ namespace zergtool.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepo _userRepo;
-        public UsersController(IUserRepo userService)
+        public UsersController(IUserRepo userRepo)
         {
-            _userRepo = userService;
+            _userRepo = userRepo;
         }
 
         [HttpPost("register")]

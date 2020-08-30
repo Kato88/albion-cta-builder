@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using zergtool;
 using Zorn.Models;
 
 namespace Zorn.Repos
@@ -7,5 +8,7 @@ namespace Zorn.Repos
     {
         Task<string> RegisterAsync(RegisterModel model);
         Task<AuthenticationModel> GetTokenAsync(TokenRequestModel model);
+
+        Task<ApplicationUser> GetUser(System.Security.Claims.ClaimsPrincipal user);
     }
 }

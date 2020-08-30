@@ -103,5 +103,16 @@ namespace Zorn.Repos
                 return $"User {user.Email } is already registered.";
             }
         }
+
+        public async Task<ApplicationUser> GetUser(System.Security.Claims.ClaimsPrincipal user)
+        {
+            var userName = user.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userName)) {
+                return null;
+            }
+            
+            var result = await this._userManager.FindByEmailAsync(userName);
+            return result;
+        }
     }
 }

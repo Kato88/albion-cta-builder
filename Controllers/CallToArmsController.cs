@@ -49,7 +49,8 @@ namespace Zorn.Controllers
         {
             var user = await _userRepo.GetUser(this.User);
 
-            if (user == null) {
+            if (user == null)
+            {
                 NotFound();
                 return null;
             }
@@ -62,8 +63,8 @@ namespace Zorn.Controllers
             cta.ExtraSets = payload.ExtraSets;
 
             cta.Parties.Add(new Party { Name = "Party 1" });
-            cta.Admins.Add(new CtaAdmin {
-                Id = Guid.NewGuid(),
+            cta.Admins.Add(new CtaAdmin
+            {
                 CallToArms = cta,
                 UserId = new Guid(user.Id)
             });
@@ -122,7 +123,8 @@ namespace Zorn.Controllers
 
             var queuePlayer = cta.Queue.FirstOrDefault(x => x.Name == payload.Name);
 
-            if (queuePlayer == null) {
+            if (queuePlayer == null)
+            {
                 return NotFound("You did not even join the queue. There are " + cta.Queue.Count + " players in queue");
             }
 
@@ -133,30 +135,60 @@ namespace Zorn.Controllers
         }
 
         [HttpPost("{id}/move")]
-        public async Task<ActionResult> MoveToParty(Guid id)
+        public async Task<ActionResult> MoveToParty(Guid id, [FromBody] MoveToPartyPayload payload)
         {
-            bool isAdmin = this.User.IsInRole(Authorization.Roles.Administrator.ToString());
-            bool isLeader = this.User.IsInRole(Authorization.Roles.Leader.ToString());
-            bool isOfficer = this.User.IsInRole(Authorization.Roles.Officer.ToString());
-            bool isMember = this.User.IsInRole(Authorization.Roles.Member.ToString());
-
             var user = await _userRepo.GetUser(this.User);
 
-            if (user == null) {
+            if (user == null)
+            {
                 return Forbid();
             }
 
-            var cta = await this._ctaDbContext.Ctas.Include(x => x.Admins).FirstOrDefaultAsync(x => x.Id == id);
+            var cta = await this._ctaDbContext.Ctas.Include(x => x.Admins).Include(x => x.Parties).Include(x => x.Queue).FirstOrDefaultAsync(x => x.Id == id);
+            var role = await this._ctaDbContext.CtaRoles.FirstOrDefaultAsync(x => x.Id == payload.Role.Id);
 
-            if (cta.Admins.Any(x => x.UserId == new Guid(user.Id))) {
-                return Ok("isAdmin: " + isAdmin + " | isLeader: " + isLeader + " | isOfficer: " + isOfficer + " | isMember: " + isMember + " | IsAuthenticated: " + this.User.Identity.IsAuthenticated + " | Name: " + this.User.Identities.FirstOrDefault().Name + " | Id: " + this.User.FindFirst(ClaimTypes.NameIdentifier).Value + " | Id2: " + user.Id + " | Username: " + user.Email);
-            } else {
+            if (cta == null)
+            {
+                return Forbid("CTA not found");
+            }
+
+            if (role == null) {
+                return Forbid("Role not found");
+            }
+
+            var queuePlayer = cta.Queue.FirstOrDefault(x => x.Name == payload.Name);
+            var party = cta.Parties.FirstOrDefault(x => x.Name == payload.Party);
+            var admin = cta.Admins.FirstOrDefault(x => x.UserId == new Guid(user.Id));
+
+            if (queuePlayer != null && party != null && admin != null)
+            {
+                party.Players.Add(new Player
+                {
+                    Name = payload.Name,
+                    Role = role
+                });
+
+                cta.Queue.Remove(queuePlayer);
+                await _ctaDbContext.SaveChangesAsync();
+
+                return Ok();
+            }
+            else
+            {
                 return Forbid();
             }
         }
     }
 
-    public class LeaveCtaQueuePayload {
+    public class MoveToPartyPayload
+    {
+        public string Name { get; set; }
+        public string Party { get; set; }
+        public Role Role { get; set; }
+    }
+
+    public class LeaveCtaQueuePayload
+    {
         public string Name { get; set; }
     }
 

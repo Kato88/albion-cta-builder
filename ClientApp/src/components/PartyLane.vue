@@ -23,7 +23,7 @@
               <v-list-item v-for="(player, index) in players" :key="player.name">
                 <role-avatar
                   style="width: 32px; height: 32px; margin: 0px;"
-                  :src="player.role.internalName"
+                  :src="player.role.iconUrl"
                 ></role-avatar>
                 <v-list-item-content>
                   <v-list-item-title v-text="player.name"></v-list-item-title>

@@ -36,7 +36,7 @@
                           <v-btn icon @click="() => { clearFilter(); filter = role.internalName }">
                             <role-avatar
                               style="width: 40px; height: 40px;"
-                              :src="role.internalName"
+                              :src="role.iconUrl"
                             ></role-avatar>
                           </v-btn>
                         </v-col>
@@ -69,7 +69,7 @@
                           class="handle"
                           :key="item.name + '-' + role.internalName"
                           style="width: 32px; height: 32px; min-width: 32px; margin: 0;"
-                          :src="role.internalName"
+                          :src="role.iconUrl"
                           v-if="(!filter || filter === role.internalName) && (!categoryFilter || categoryFilter === role.category)"
                         ></role-avatar>
                       </template>

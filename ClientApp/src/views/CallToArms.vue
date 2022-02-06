@@ -63,7 +63,7 @@
                         />
                         <img
                           v-else
-                          :src="`https://albiononline2d.ams3.cdn.digitaloceanspaces.com/thumbnails/orig/${role.internalName}`"
+                          :src="`https://render.albiononline.com/v1/item/${role.internalName}`"
                         />
                       </v-list-item-avatar>
                       </v-btn>

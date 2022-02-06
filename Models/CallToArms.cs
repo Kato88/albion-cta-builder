@@ -44,6 +44,27 @@ namespace Zorn.Models
 
             Roles.Add(new Role
             {
+                Category = "Tank",
+                Title = "Grailseeker",
+                InternalName = "T8_2H_QUARTERSTAFF_AVALON"
+            });
+
+            Roles.Add(new Role
+            {
+                Category = "Tank",
+                Title = "Hand of Justice",
+                InternalName = "T8_2H_HAMMER_AVALON"
+            });
+
+            Roles.Add(new Role
+            {
+                Category = "Tank",
+                Title = "Morning Star",
+                InternalName = "T8_2H_FLAIL"
+            });
+
+            Roles.Add(new Role
+            {
                 Category = "Heal",
                 Title = "Holy",
                 InternalName = "T8_2H_HOLYSTAFF_HELL"
@@ -59,15 +80,8 @@ namespace Zorn.Models
             Roles.Add(new Role
             {
                 Category = "Melee",
-                Title = "Clarent Blade",
-                InternalName = "T8_MAIN_SCIMITAR_MORGANA"
-            });
-
-            Roles.Add(new Role
-            {
-                Category = "Melee",
-                Title = "Halberd",
-                InternalName = "T8_2H_HALBERD"
+                Title = "Kingmaker",
+                InternalName = "T8_2H_CLAYMORE_AVALON"
             });
 
             Roles.Add(new Role
@@ -82,6 +96,34 @@ namespace Zorn.Models
                 Category = "Melee",
                 Title = "Bloodletter",
                 InternalName = "T8_MAIN_RAPIER_MORGANA"
+            });
+
+            Roles.Add(new Role
+            {
+                Category = "Melee",
+                Title = "Realmbreaker",
+                InternalName = "T8_2H_AXE_AVALON"
+            });
+
+            Roles.Add(new Role
+            {
+                Category = "Melee",
+                Title = "Bridled Fury",
+                InternalName = "T8_2H_DAGGER_KATAR_AVALON"
+            });
+
+            Roles.Add(new Role
+            {
+                Category = "Melee",
+                Title = "Spirithunter",
+                InternalName = "T8_2H_HARPOON_HELL"
+            });
+
+            Roles.Add(new Role
+            {
+                Category = "Melee",
+                Title = "Spirithunter",
+                InternalName = "T8_2H_HARPOON_HELL"
             });
 
             Roles.Add(new Role
@@ -108,8 +150,8 @@ namespace Zorn.Models
             Roles.Add(new Role
             {
                 Category = "Ranged",
-                Title = "Wailing Bow",
-                InternalName = "T8_2H_BOW_HELL"
+                Title = "Mistpiercer",
+                InternalName = "T8_2H_BOW_AVALON"
             });
 
             Roles.Add(new Role
@@ -122,8 +164,15 @@ namespace Zorn.Models
             Roles.Add(new Role
             {
                 Category = "Ranged",
-                Title = "Weeping",
-                InternalName = "T8_2H_REPEATINGCROSSBOW_UNDEAD"
+                Title = "Energy Shaper",
+                InternalName = "T8_2H_CROSSBOW_CANNON_AVALON"
+            });
+
+            Roles.Add(new Role
+            {
+                Category = "Ranged",
+                Title = "Longbow",
+                InternalName = "T8_2H_LONGBOW"
             });
 
             Roles.Add(new Role
@@ -170,6 +219,13 @@ namespace Zorn.Models
 
             Roles.Add(new Role
             {
+                Category = "Support",
+                Title = "Lifecurse",
+                InternalName = "T8_MAIN_CURSEDSTAFF_UNDEAD"
+            });
+
+            Roles.Add(new Role
+            {
                 Category = "Battlemount",
                 Title = "Command Mammoth",
                 InternalName = "T8_MOUNT_MAMMOTH_BATTLE"
@@ -201,6 +257,20 @@ namespace Zorn.Models
                 Category = "Battlemount",
                 Title = "Eagle",
                 InternalName = "UNIQUE_MOUNT_ARMORED_EAGLE_CRYSTAL"
+            });
+
+            Roles.Add(new Role
+            {
+                Category = "Extra",
+                Title = "Undecided",
+                InternalName = "T8_TRASH"
+            });
+
+            Roles.Add(new Role
+            {
+                Category = "Extra",
+                Title = "Not Available",
+                InternalName = "T8_TRASH"
             });
         }
     }
